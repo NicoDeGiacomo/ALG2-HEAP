@@ -78,7 +78,7 @@ size_t heap_cantidad(const heap_t *heap) {
 }
 
 bool heap_esta_vacio(const heap_t *heap) {
-	return (bool) heap->tabla[0];
+	return (bool) heap_cantidad(heap);
 }
 
 //TODO: Implement me!
