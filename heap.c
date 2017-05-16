@@ -71,6 +71,7 @@ void heap_destruir(heap_t *heap, void destruir_elemento(void *e)) {
 		if(destruir_elemento)
 			destruir_elemento(buffer);
 	}
+	free(heap);
 }
 
 
