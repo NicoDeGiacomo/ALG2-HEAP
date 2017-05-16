@@ -22,6 +22,7 @@
  * le pase una función de comparación. Modifica el arreglo "in-place".
  * Nótese que esta función NO es formalmente parte del TAD Heap.
  */
+//TODO: Implement me!
 void heap_sort(void *elementos[], size_t cant, cmp_func_t cmp) {
 	
 }
