@@ -53,11 +53,11 @@ heap_t *heap_crear(cmp_func_t cmp) {
 
 heap_t *heap_crear_arr(void *arreglo[], size_t n, cmp_func_t cmp) {
 	heap_t* heap = heap_crear(cmp);
-	
+
 	for(int i = 0; i < n; i++) {
 		heap_encolar(heap, arreglo[i]);
 	}
-	
+
 	return heap;
 }
 
@@ -80,8 +80,11 @@ bool heap_esta_vacio(const heap_t *heap) {
 	return !heap_cantidad(heap);
 }
 
-//TODO: Implement me!
 bool heap_encolar(heap_t *heap, void *elem) {
+    //TODO: Controlar la redimension
+    heap->tabla[heap->cantidad] = elem;
+    heap->cantidad++;
+    up_heap(heap);
 	return true;
 }
 
@@ -91,7 +94,25 @@ void *heap_ver_max(const heap_t *heap) {
 	return heap->tabla[0];
 }
 
-//TODO: Implement me!
 void *heap_desencolar(heap_t *heap) {
-	return NULL;
+    if(heap_esta_vacio(heap))
+        return NULL;
+    //TODO: Controlar la redimension
+    void* buffer = heap->tabla[0];
+    heap->tabla[0] = heap->tabla[heap->cantidad-1];
+    heap->tabla[heap->cantidad-1] = NULL;
+    heap->cantidad--;
+    down_heap(heap);
+
+    return NULL;
+}
+
+//TODO: Implement me!
+void up_heap(heap_t* heap){
+
+}
+
+//TODO: Implement me!
+void down_heap(heap_t* heap){
+
 }
