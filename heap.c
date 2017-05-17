@@ -4,6 +4,9 @@
 #include "heap.h"
 
 #define TAMANIO_INICIAL 500
+#define PADRE(i) (i-1)/2
+#define HIJO_IZQ(i) (2*i)+1
+#define HIJO_DER(i) (2*i)+2
 
 
 /* ******************************************************************
@@ -20,6 +23,9 @@
 /* ******************************************************************
  *                			FUNCIONES APARTE
  * *****************************************************************/
+void up_heap(heap_t* heap);
+void down_heap(heap_t* heap);
+void swap(heap_t* heap, size_t indice1, size_t indice2);
 
 //TODO: Implement me!
 void heap_sort(void *elementos[], size_t cant, cmp_func_t cmp) {
@@ -91,12 +97,14 @@ bool heap_encolar(heap_t *heap, void *elem) {
 void *heap_ver_max(const heap_t *heap) {
     if (heap_esta_vacio(heap))
         return NULL;
+
 	return heap->tabla[0];
 }
 
 void *heap_desencolar(heap_t *heap) {
     if(heap_esta_vacio(heap))
         return NULL;
+
     //TODO: Controlar la redimension
     void* buffer = heap->tabla[0];
     heap->tabla[0] = heap->tabla[heap->cantidad-1];
@@ -104,15 +112,44 @@ void *heap_desencolar(heap_t *heap) {
     heap->cantidad--;
     down_heap(heap);
 
-    return NULL;
+    return buffer;
 }
 
-//TODO: Implement me!
 void up_heap(heap_t* heap){
-
+    size_t actual = heap->cantidad-1;
+    size_t padre = PADRE(actual);
+    while(heap->comparador(heap->tabla[actual], heap->tabla[padre]) < 0){
+        swap(heap, actual, padre);
+        actual = padre;
+        padre = PADRE(actual);
+    }
 }
 
-//TODO: Implement me!
 void down_heap(heap_t* heap){
+    size_t actual = 0;
+    size_t hijo_izq = HIJO_IZQ(actual);
+    size_t hijo_der = HIJO_DER(actual);
+    while(true){
+        if ( hijo_izq < heap->cantidad &&heap->comparador(heap->tabla[actual], heap->tabla[hijo_izq]) > 0){
+            swap(heap, actual, hijo_izq);
+            actual = hijo_izq;
+            hijo_izq = HIJO_IZQ(actual);
+            hijo_der = HIJO_DER(actual);
+        }
+        else if( hijo_der < heap->cantidad && heap->comparador(heap->tabla[actual], heap->tabla[hijo_der]) > 0){
+            swap(heap, actual, hijo_der);
+            actual = hijo_der;
+            hijo_izq = HIJO_IZQ(actual);
+            hijo_der = HIJO_DER(actual);
+        }
+        else
+            break;
+    }
+}
 
+void swap(heap_t* heap, size_t indice1, size_t indice2){
+    void* buffer = heap->tabla[indice1];
+    heap->tabla[indice1] = heap->tabla[indice2];
+    heap->tabla[indice2] = buffer;
+    return;
 }
