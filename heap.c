@@ -27,10 +27,11 @@ void heap_sort(void *elementos[], size_t cant, cmp_func_t cmp) {
 }
 
 bool heap_redimensionar(heap_t* heap, size_t tam_nuevo) {
-	//TODO: CASO DE FALLO
-    void** tablaBuffer = realloc(heap->tabla, tam_nuevo * sizeof(void*));
+    void** tabla = realloc(heap->tabla, tam_nuevo * sizeof(void*));
+    if (!tabla)
+        return false;
 
-    heap->tabla = tablaBuffer;
+    heap->tabla = tabla;
     heap->cantidad = tam_nuevo;
     return true;
 }
