@@ -132,7 +132,7 @@ void *heap_desencolar(heap_t *heap) {
     heap->cantidad--;
     down_heap(heap);
 
-	if((double) heap->cantidad / (double) heap->tamanio <= heap->tamanio / 4) 
+	if( heap->cantidad <= heap->tamanio / 4) 
 		heap_redimensionar(heap, heap->tamanio / FACT_REDIM);
 	
     return buffer;
