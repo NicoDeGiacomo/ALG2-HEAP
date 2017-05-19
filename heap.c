@@ -93,6 +93,7 @@ void heap_destruir(heap_t *heap, void destruir_elemento(void *e)) {
 
     free(heap->tabla);
 	free(heap);
+	heap = NULL;
 }
 
 size_t heap_cantidad(const heap_t *heap) {
@@ -142,7 +143,7 @@ void *heap_desencolar(heap_t *heap) {
 void up_heap(heap_t* heap){
     size_t actual = heap->cantidad-1;
     size_t padre = PADRE(actual);
-    while(actual && heap->comparador(heap->tabla[actual], heap->tabla[padre]) < 0){
+    while(actual && heap->comparador(heap->tabla[actual], heap->tabla[padre]) > 0){
         swap(heap, actual, padre);
         actual = padre;
         padre = PADRE(actual);
