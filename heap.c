@@ -50,7 +50,7 @@ bool heap_redimensionar(heap_t* heap, size_t tam_nuevo) {
         return false;
 
     heap->tabla = tabla;
-    heap->cantidad = tam_nuevo;
+    heap->tamanio = tam_nuevo;
     return true;
 }
 
@@ -91,6 +91,7 @@ void heap_destruir(heap_t *heap, void destruir_elemento(void *e)) {
 			destruir_elemento(buffer);
 	}
 
+    free(heap->tabla);
 	free(heap);
 }
 
@@ -141,7 +142,7 @@ void *heap_desencolar(heap_t *heap) {
 void up_heap(heap_t* heap){
     size_t actual = heap->cantidad-1;
     size_t padre = PADRE(actual);
-    while(heap->comparador(heap->tabla[actual], heap->tabla[padre]) < 0){
+    while(actual && heap->comparador(heap->tabla[actual], heap->tabla[padre]) < 0){
         swap(heap, actual, padre);
         actual = padre;
         padre = PADRE(actual);
@@ -149,6 +150,8 @@ void up_heap(heap_t* heap){
 }
 
 void down_heap(heap_t* heap){
+    if(heap->cantidad <= 1)
+        return;
     size_t actual = 0;
     size_t hijo_izq = HIJO_IZQ(actual);
     size_t hijo_der = HIJO_DER(actual);
