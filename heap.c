@@ -25,9 +25,9 @@
 /* ******************************************************************
  *                			FUNCIONES APARTE
  * *****************************************************************/
-void up_heap(heap_t* heap, size_t actual);
-void down_heap(heap_t* heap, size_t cantidad, size_t actual);
-void swap(heap_t* heap, size_t indice1, size_t indice2);
+void up_heap(void** tabla, cmp_func_t cmp, size_t actual);
+void down_heap(void** tabla, cmp_func_t cmp, size_t cantidad, size_t actual);
+void swap(void** pointer1, void** pointer2);
 
 //TODO: Revisar.
 void heap_sort(void *elementos[], size_t cant, cmp_func_t cmp) {
@@ -39,7 +39,7 @@ void heap_sort(void *elementos[], size_t cant, cmp_func_t cmp) {
 		heap->tabla[i] = elementos[i];
     }
     for(size_t i = cant; i > 0; i--) {
-        down_heap(heap, heap->cantidad, i-1);
+        down_heap(heap->tabla, cmp, heap->cantidad, i-1);
     }
     for(int i = 0; i < cant; i++) {
         elementos[i] = heap_desencolar(heap);
@@ -97,7 +97,6 @@ void heap_destruir(heap_t *heap, void destruir_elemento(void *e)) {
 
     free(heap->tabla);
 	free(heap);
-	heap = NULL;
 }
 
 size_t heap_cantidad(const heap_t *heap) {
@@ -117,7 +116,7 @@ bool heap_encolar(heap_t *heap, void *elem) {
 
     heap->tabla[heap->cantidad] = elem;
     heap->cantidad++;
-    up_heap(heap, heap->cantidad-1);
+    up_heap(heap->tabla, heap->comparador, heap->cantidad-1);
 	return true;
 }
 
@@ -136,7 +135,7 @@ void *heap_desencolar(heap_t *heap) {
     heap->tabla[0] = heap->tabla[heap->cantidad-1];
     heap->tabla[heap->cantidad-1] = NULL;
     heap->cantidad--;
-    down_heap(heap, heap->cantidad, 0);
+    down_heap(heap->tabla, heap->comparador, heap->cantidad, 0);
 
 
 	if( heap->cantidad <= heap->tamanio / 4)
@@ -146,38 +145,36 @@ void *heap_desencolar(heap_t *heap) {
 }
 
 //Esto tiene que recibir una tabla
-void up_heap(heap_t* heap, size_t actual){
+void up_heap(void** tabla, cmp_func_t cmp, size_t actual){
     if (actual == 0)
         return;
     size_t padre = PADRE(actual);
-    if(heap->comparador(heap->tabla[actual], heap->tabla[padre]) > 0){
-        swap(heap, actual, padre);
-        //TODO: swap(&heap->tabla[actual], &heap->tabla[padre]);
-        up_heap(heap, padre);
+    if(cmp(tabla[actual], tabla[padre]) > 0){
+        swap(&tabla[padre], &tabla[actual]);
+        up_heap(tabla, cmp, padre);
     }
 }
 
-//Esto tiene que recibir una tabla
-void down_heap(heap_t* heap, size_t cantidad, size_t actual){
+void down_heap(void** tabla, cmp_func_t cmp, size_t cantidad, size_t actual){
     if(actual >= cantidad)
         return;
     //TODO: CAMBIAR PRUEBA VOLUMEN ABB PORQUE INSERTA EN ORDEN
     size_t max = actual;
     size_t hijo_izq = HIJO_IZQ(actual);
     size_t hijo_der = HIJO_DER(actual);
-    if(hijo_izq < cantidad && heap->comparador(heap->tabla[hijo_izq], heap->tabla[max]) > 0)
+    if(hijo_izq < cantidad && cmp(tabla[hijo_izq], tabla[max]) > 0)
         max = hijo_izq;
-    if(hijo_der < cantidad && heap->comparador(heap->tabla[hijo_der], heap->tabla[max]) > 0)
+    if(hijo_der < cantidad && cmp(tabla[hijo_der], tabla[max]) > 0)
         max = hijo_der;
     if(max != actual){
-        swap(heap, max, actual);
-        down_heap(heap, cantidad, max);
+        swap(&tabla[max], &tabla[actual]);
+        down_heap(tabla, cmp, cantidad, max);
     }
 }
 
-void swap(heap_t* heap, size_t indice1, size_t indice2){
-    void* buffer = heap->tabla[indice1];
-    heap->tabla[indice1] = heap->tabla[indice2];
-    heap->tabla[indice2] = buffer;
+void swap(void** pointer1, void** pointer2){
+    void* buffer = *pointer1;
+    *pointer1 = *pointer2;
+    *pointer2 = buffer;
     return;
 }
