@@ -13,10 +13,6 @@ int intcmp(const void *a, const void *b) {
 	return 0;
 }
 
-int charcmp(const void *a, const void *b) {
-	return strcmp((const char*) a, (const char*) b);
-}
-
 int pointcmp(const void *a, const void *b) {
 	if(a < b)
 		return -1;
@@ -66,27 +62,27 @@ static void prueba_heap_insertar_enteros()
 static void prueba_heap_desencolar()
 {
 	printf("\n~~~ PRUEBAS HEAP DESENCOLAR CADENAS ~~~\n");
-    heap_t* heap = heap_crear(charcmp);
+    heap_t* heap = heap_crear(intcmp);
 
-    char *valor1 = "guau";
-    char *valor2 = "miau";
-    char *valor3 = "mu";
+    int valor1 = 1;
+    int valor2 = 2;
+    int valor3 = 3;
 
     /* Inserta 3 valores y luego los borra */
-    print_test("Prueba heap insertar valor1", heap_encolar(heap, valor1));
-    print_test("Prueba heap insertar valor2", heap_encolar(heap, valor2));
-    print_test("Prueba heap insertar valor3", heap_encolar(heap, valor3));
+    print_test("Prueba heap insertar valor1", heap_encolar(heap, &valor1));
+    print_test("Prueba heap insertar valor2", heap_encolar(heap, &valor3));
+    print_test("Prueba heap insertar valor3", heap_encolar(heap, &valor2));
 
     /* Al borrar cada elemento comprueba que respeta la prioridad de MAX. */
-    print_test("Prueba heap desencolar, es valor3", heap_desencolar(heap) == valor3);
+    print_test("Prueba heap desencolar, es valor3", heap_desencolar(heap) == &valor3);
     print_test("Prueba heap esta vacio, es FALSE", !heap_esta_vacio(heap));
     print_test("Prueba heap la cantidad de elementos es 2", heap_cantidad(heap) == 2);
 
-    print_test("Prueba heap desencolar, es valor1", heap_desencolar(heap) == valor1);
+    print_test("Prueba heap desencolar, es valor2", heap_desencolar(heap) == &valor2);
     print_test("Prueba heap esta vacio, es FALSE", !heap_esta_vacio(heap));
     print_test("Prueba heap la cantidad de elementos es 1", heap_cantidad(heap) == 1);
 
-    print_test("Prueba heap desencolar, es valor2", heap_desencolar(heap) == valor2);
+    print_test("Prueba heap desencolar, es valor1", heap_desencolar(heap) == &valor1);
     print_test("Prueba heap esta vacio, es TRUE", heap_esta_vacio(heap));
     print_test("Prueba heap la cantidad de elementos es 0", heap_cantidad(heap) == 0);
 
@@ -98,12 +94,11 @@ static void prueba_heap_valores_dinamicos()
 	printf("\n~~~ PRUEBAS HEAP VALORES DINAMICOS ~~~\n");
     heap_t* heap = heap_crear(pointcmp);
 
-    char *valor1 = malloc(10 * sizeof(char));
-	heap_encolar(heap, valor1);
-	heap_encolar(heap, valor1);
+    int *valor1 = malloc(sizeof(int));
+    *valor1 = 1;
 	
     print_test("Prueba heap insertar valor dinamico", heap_encolar(heap, valor1));
-    print_test("Prueba heap la cantidad de elementos es 3", heap_cantidad(heap) == 3);
+    print_test("Prueba heap la cantidad de elementos es 3", heap_cantidad(heap) == 1);
     print_test("Prueba heap desencolar, es valor dinamico", heap_desencolar(heap) == valor1);
 
     heap_destruir(heap, free);
@@ -113,7 +108,7 @@ static void prueba_heap_valores_dinamicos()
 
 static void prueba_heap_valor_null()
 {
-    heap_t* heap = heap_crear(charcmp);
+    heap_t* heap = heap_crear(intcmp);
 
     char *valor = NULL;
 
@@ -155,9 +150,10 @@ static void prueba_heap_volumen(size_t largo, bool debug)
     if (debug) print_test("Prueba heap la cantidad de elementos es correcta", heap_cantidad(heap) == largo);
 
     /* Verifica que borre y devuelva los valores correctos */
-    for (int i = largo - 1; i > -1; i--) {
-        ok = (heap_desencolar(heap) == valores[i]);
-        //if (!ok) break; //TODO: Fijarse porqué hace break.
+    for (size_t i = largo; i > 0; i--) {
+        void * a = heap_desencolar(heap);
+        ok = ( a == valores[i-1]);
+        if (!ok) break;
     }
 
     if (debug) print_test("Prueba heap borrar muchos elementos", ok);
