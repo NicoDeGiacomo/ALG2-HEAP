@@ -158,7 +158,6 @@ void up_heap(void** tabla, cmp_func_t cmp, size_t actual){
 void down_heap(void** tabla, cmp_func_t cmp, size_t cantidad, size_t actual){
     if(actual >= cantidad)
         return;
-    //TODO: CAMBIAR PRUEBA VOLUMEN ABB PORQUE INSERTA EN ORDEN
     size_t max = actual;
     size_t hijo_izq = HIJO_IZQ(actual);
     size_t hijo_der = HIJO_DER(actual);
