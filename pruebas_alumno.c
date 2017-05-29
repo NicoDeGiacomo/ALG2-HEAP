@@ -33,9 +33,27 @@ static void prueba_crear_heap_vacio() {
     heap_destruir(heap, NULL);
 }
 
-static void prueba_heap_insertar_enteros()
+static void prueba_heap_insertar_arreglo_enteros()
 {
-	printf("\n~~~ PRUEBAS HEAP INSERTAR ENTEROS ~~~\n");
+	printf("\n~~~ PRUEBAS HEAP INSERTAR ARRAY DE ENTEROS ~~~\n");
+
+    int a = 1;
+    int b = 2;
+    int c = 3;
+    int d = 4;
+    int* elementos[] = { &a, &b ,&c, &d};
+
+    heap_t* heap = heap_crear_arr((void **) elementos, 4, intcmp);
+
+    /* Inserta 1 valor y luego lo borra */
+    print_test("Prueba insertar 4 valores", (bool) heap);
+    print_test("Prueba la cantidad de elementos es 4", heap_cantidad(heap) == 4);
+
+    heap_destruir(heap, NULL);
+}
+
+void prueba_heap_insertar_enteros(void) {
+    printf("\n~~~ PRUEBAS HEAP INSERTAR ENTEROS ~~~\n");
     heap_t* heap = heap_crear(intcmp);
 
     int valor1 = 1, valor2 = 2, valor3 = 3;
@@ -51,7 +69,7 @@ static void prueba_heap_insertar_enteros()
     print_test("Prueba encolar valor2", heap_encolar(heap, &valor2));
     print_test("Prueba la cantidad de elementos es 1", heap_cantidad(heap) == 1);
     print_test("Prueba ver MAX es valor2", heap_ver_max(heap) == &valor2);
-	
+
     print_test("Prueba encolar valor3", heap_encolar(heap, &valor3));
     print_test("Prueba la cantidad de elementos es 1", heap_cantidad(heap) == 2);
     print_test("Prueba ver MAX es valor3", heap_ver_max(heap) == &valor3);
@@ -99,7 +117,6 @@ static void prueba_heap_valores_dinamicos()
 	
     print_test("Prueba heap insertar valor dinamico", heap_encolar(heap, valor1));
     print_test("Prueba heap la cantidad de elementos es 3", heap_cantidad(heap) == 1);
-    print_test("Prueba heap desencolar, es valor dinamico", heap_desencolar(heap) == valor1);
 
     heap_destruir(heap, free);
 	
@@ -176,11 +193,31 @@ static void prueba_heap_volumen(size_t largo, bool debug)
 
 }
 
+void prueba_heap_sort(void){
+    int* elementos0[] = {};
+    heap_sort((void **) elementos0, 0, intcmp);
+    print_test("Prueba heap sort 0 elementos", true);
+
+    int a = 1;
+    int* elementos[] = { &a};
+    heap_sort((void **) elementos, 1, intcmp);
+    print_test("Prueba heap sort 1 elemento", elementos[0] == &a);
+
+    int b = 2;
+    int c = 3;
+    int d = 4;
+    int* elementos2[] = { &a, &b ,&c, &d};
+    heap_sort((void **) elementos2, 4, intcmp);
+    print_test("Prueba heap sort 4 elementos", elementos2[0] == &a);
+}
+
 void pruebas_heap_alumno(){
     prueba_crear_heap_vacio();
     prueba_heap_insertar_enteros();
+    prueba_heap_insertar_arreglo_enteros();
     prueba_heap_desencolar();
     prueba_heap_valores_dinamicos();
     prueba_heap_valor_null();
     prueba_heap_volumen(5000, true);
+    prueba_heap_sort();
 }

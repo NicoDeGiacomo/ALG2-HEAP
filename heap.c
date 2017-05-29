@@ -29,22 +29,16 @@ void up_heap(void** tabla, cmp_func_t cmp, size_t actual);
 void down_heap(void** tabla, cmp_func_t cmp, size_t cantidad, size_t actual);
 void swap(void** pointer1, void** pointer2);
 
-//TODO: Revisar.
 void heap_sort(void *elementos[], size_t cant, cmp_func_t cmp) {
-	heap_t* heap = heap_crear(cmp);
-	//TODO: Checkear null ? + Checkear size_t + copiar el arreglo
 
-	for(int i = 0; i < cant; i++) {
-        //Copiar los elemntos a una tabla y usar down heap para cada uno y swap primero con ultimo y matar ultimo + downheap al primero
-		heap->tabla[i] = elementos[i];
+    for (size_t i = cant; i > 0; --i) {
+        down_heap(elementos, cmp, cant, i-1);
     }
-    for(size_t i = cant; i > 0; i--) {
-        down_heap(heap->tabla, cmp, heap->cantidad, i-1);
+
+    for (size_t i = cant; i > 0; --i) {
+        swap(&elementos[0], &elementos[i-1]);
+        down_heap(elementos, cmp, i-1, 0);
     }
-    for(int i = 0; i < cant; i++) {
-        elementos[i] = heap_desencolar(heap);
-    }
-    heap_destruir(heap, NULL);
 }
 
 bool heap_redimensionar(heap_t* heap, size_t tam_nuevo) {
@@ -74,7 +68,6 @@ heap_t *heap_crear(cmp_func_t cmp) {
     return heap;
 }
 
-//TODO: HACER PRUEBAS
 heap_t *heap_crear_arr(void *arreglo[], size_t n, cmp_func_t cmp) {
 	heap_t* heap = heap_crear(cmp);
 	if(!heap)
