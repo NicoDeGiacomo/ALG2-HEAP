@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "heap.h"
 
-#define TAMANIO_INICIAL 500
+#define TAMANIO_INICIAL 1000
 #define PADRE(i) (i-1)/2
 #define HIJO_IZQ(i) (2*i)+1
 #define HIJO_DER(i) (2*i)+2
