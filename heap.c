@@ -137,7 +137,6 @@ void *heap_desencolar(heap_t *heap) {
     return buffer;
 }
 
-//Esto tiene que recibir una tabla
 void up_heap(void** tabla, cmp_func_t cmp, size_t actual){
     if (actual == 0)
         return;
