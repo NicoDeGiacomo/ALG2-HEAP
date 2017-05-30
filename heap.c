@@ -7,8 +7,9 @@
 #define PADRE(i) (i-1)/2
 #define HIJO_IZQ(i) (2*i)+1
 #define HIJO_DER(i) (2*i)+2
-#define COEF_REDIM 0.7
-#define FACT_REDIM 2
+#define REDIM_MAX 0.7
+#define REDIM_MIN 0.25
+#define COEF_REDIM 2
 
 /* ******************************************************************
  *                DEFINICION DE LOS TIPOS DE DATOS
@@ -102,8 +103,8 @@ bool heap_esta_vacio(const heap_t *heap) {
 
 bool heap_encolar(heap_t *heap, void *elem) {
 
-	if((double) heap->cantidad / (double) heap->tamanio >= COEF_REDIM) {
-		if(!heap_redimensionar(heap, heap->tamanio * FACT_REDIM))
+	if((double) heap->cantidad / (double) heap->tamanio >= REDIM_MAX) {
+		if(!heap_redimensionar(heap, heap->tamanio * COEF_REDIM))
 			return false;
 	}
 
@@ -131,8 +132,8 @@ void *heap_desencolar(heap_t *heap) {
     down_heap(heap->tabla, heap->comparador, heap->cantidad, 0);
 
 
-	if( heap->cantidad <= heap->tamanio / 4)
-		heap_redimensionar(heap, heap->tamanio / FACT_REDIM);
+	if( (heap->cantidad/heap->tamanio) >= REDIM_MIN)
+		heap_redimensionar(heap, heap->tamanio / COEF_REDIM);
 
     return buffer;
 }
