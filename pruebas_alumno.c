@@ -1,3 +1,6 @@
+//Nombres: Nicolás De Giácomo - Gastón N. Ponce
+//Padrones: 99702 - 99723
+//DNIs: 39.490.629 - 40.393.064
 #include <string.h>
 #include "heap.h"
 #include "testing.h"
@@ -48,6 +51,10 @@ static void prueba_heap_insertar_arreglo_enteros()
     /* Inserta 1 valor y luego lo borra */
     print_test("Prueba insertar 4 valores", (bool) heap);
     print_test("Prueba la cantidad de elementos es 4", heap_cantidad(heap) == 4);
+    print_test("Prueba ver MAX es d", heap_ver_max(heap) == &d);
+    print_test("Prueba desencolar, es d", heap_desencolar(heap) == &d);
+    print_test("Prueba ver MAX es c", heap_ver_max(heap) == &c);
+    print_test("Prueba la cantidad de elementos es 3", heap_cantidad(heap) == 3);
 
     heap_destruir(heap, NULL);
 }

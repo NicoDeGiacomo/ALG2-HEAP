@@ -1,3 +1,6 @@
+//Nombres: Nicolás De Giácomo - Gastón N. Ponce
+//Padrones: 99702 - 99723
+//DNIs: 39.490.629 - 40.393.064
 #include <stdbool.h>  /* bool */
 #include <stddef.h>	  /* size_t */
 #include <stdlib.h>
@@ -70,13 +73,18 @@ heap_t *heap_crear(cmp_func_t cmp) {
 }
 
 heap_t *heap_crear_arr(void *arreglo[], size_t n, cmp_func_t cmp) {
-	heap_t* heap = heap_crear(cmp);
-	if(!heap)
-		return NULL;
+    heap_t* heap = heap_crear(cmp);
+    if(!heap)
+        return NULL;
 
-	for(int i = 0; i < n; i++) {
-		heap_encolar(heap, arreglo[i]);
-	}
+    for(int i = 0; i < n; i++) {
+        heap->tabla[i] = arreglo[i];
+    }
+    heap->cantidad = n;
+
+    for (size_t i = n; i > 0; --i) {
+        down_heap(heap->tabla, cmp, heap->cantidad, i-1);
+    }
 
 	return heap;
 }

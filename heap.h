@@ -1,3 +1,6 @@
+//Nombres: Nicolás De Giácomo - Gastón N. Ponce
+//Padrones: 99702 - 99723
+//DNIs: 39.490.629 - 40.393.064
 #ifndef HEAP_H
 #define HEAP_H
 
